@@ -6,10 +6,10 @@ sudo pip install -U textblob
 
 python -m textblob.download_corpora
 """
-
+from __future__ import division, unicode_literals
 import math
 from textblob import TextBlob as tb
-from __future__ import division, unicode_literals
+
 
 def tf(word, blob):
     return blob.words.count(word) / len(blob.words)
@@ -29,7 +29,7 @@ import operator
 
 
 for num in range(100):
-    review = "review_text" + str(num).zfill(4) + ".txt"
+    review = "review_text" + str(num).zfill(2) + ".txt"
     file = open(review)
     t = file.read() 
     t = t.decode("utf8")

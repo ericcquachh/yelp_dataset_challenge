@@ -2,8 +2,9 @@ import json
 import codecs
 import os
 
-DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
-file_name = "yelp_academic_dataset_review.json"
+#DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
+DATA_PATH = "/Users/ericquach/Github/yelp_data/"
+file_name = DATA_PATH + "yelp_academic_dataset_review.json"
 
 text_to_stars = {}
 with open(file_name) as json_file:
@@ -30,8 +31,8 @@ with open(file_name) as json_file:
 		text_to_stars[written_file_name] = stars
 		counter += 1
 
-for i in range(100):
-    zeroes = 2 - len(str(i))
-    zeroes_str = zeroes * '0'
-    comm = "dependencyparser.sh review_text" + zeroes_str + str(i) + ".txt > review_parsed" + zeroes_str + str(i) + ".xml"
-    os.system(comm)
+#for i in range(100):
+#    zeroes = 2 - len(str(i))
+#    zeroes_str = zeroes * '0'
+#    comm = "dependencyparser.sh review_text" + zeroes_str + str(i) + ".txt > review_parsed" + zeroes_str + str(i) + ".xml"
+#    os.system(comm)
