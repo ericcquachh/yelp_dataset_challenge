@@ -2,6 +2,7 @@ import json
 import codecs
 import os
 import nltk
+import time
 
 DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
 #DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge/"
@@ -40,5 +41,9 @@ def text_array(array):
 
 
 def main():
+	start_time = time.time()
 	stars_array = star_array()
 	review_text = text_array(stars_array)
+	print "That shit ran in: ", time.time() - start_time 
+	return review_text
+
