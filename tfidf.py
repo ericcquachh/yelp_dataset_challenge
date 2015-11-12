@@ -10,13 +10,43 @@ from __future__ import division, unicode_literals
 import math
 from textblob import TextBlob as tb
 
+import json
+import codecs
+import os
+
+import nltk
+import re
+
+# Need to run these download lines once:
+# nltk.download("stopwords") 
+# nltk.download("punkt")
+from nltk import word_tokenize, RegexpTokenizer
+from nltk.corpus import stopwords
+
+
 DATA_PATH = "/Users/ericquach/Github/yelp_data/"
 #DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
 file_name = DATA_PATH+ "yelp_academic_dataset_review.json"
 
-import json
-import codecs
-import os
+total_text = [] 
+for i in xrange(100): 
+    padding = 2 - len(str(i)) 
+    f = open(DATA_PATH + 'review_text' + ('0' * padding) + str(i) + '.txt') 
+    text = f.read()
+    # words = word_tokenize(text)
+    # print words
+    words = RegexpTokenizer(r'\w+').tokenize(text)
+
+    #filtered_words = [word.lower() for word in words if (word not in set(stopwords.words('english')) or len(word) != 1)]
+    filtered_words = []
+    for word in words:
+        word = word.lower()
+        if word not in set(stopwords.words('english')):
+            if len(word) != 1:
+                filtered_words.append(word)
+    total_text.append(filtered_words)
+    
+#print total_text
 
 text_to_stars = {}
 with open(file_name) as json_file:
@@ -60,14 +90,10 @@ bloblist = []
 import operator
 
 
-for num in range(100):
-    DATA_PATH = "/Users/ericquach/Github/yelp_data/"
-    review = DATA_PATH + "review_text" + str(num).zfill(2) + ".txt"
-    file = open(review)
-    t = file.read() 
-    t = t.decode("utf8")
-        
-    bloblist.append(tb(t))
+for i in total_text:
+
+    string = ' '.join(i)
+    bloblist.append(tb(string))
     
      
 five_stars = {}
