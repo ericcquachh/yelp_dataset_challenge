@@ -2,10 +2,10 @@ import json
 import codecs
 import os
 
-
 DATA_PATH = "/Users/ericquach/Github/yelp_data/"
+#DATA_PATH = "/Users/Janet/Downloads/CS194/yelp_dataset_challenge_academic_dataset/"
 #DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
-file_name = DATA_PATH+ "yelp_academic_dataset_review.json"
+file_name = DATA_PATH + "yelp_academic_dataset_review.json"
 
 text_to_stars = {}
 
