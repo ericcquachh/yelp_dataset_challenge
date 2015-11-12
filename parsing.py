@@ -2,11 +2,11 @@ import json
 import codecs
 import os
 
-DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
+DATA_PATH = "/Users/Janet/Downloads/CS194/yelp_dataset_challenge_academic_dataset/"
 file_name = "yelp_academic_dataset_review.json"
 
 text_to_stars = {}
-with open(file_name) as json_file:
+with open(DATA_PATH+file_name) as json_file:
 	counter = 0
 	for i, line in enumerate(json_file):
 		# Since we're just exploring, we're only counting the first 100 files
@@ -21,17 +21,18 @@ with open(file_name) as json_file:
 
 		# Wrtiting to a file
 		padding = 2 - len(str(i))
-		written_file_name = 'review_text' + ('0' * padding) + str(i) + '.txt'
-#		written_file = codecs.open(written_file_name, "w", "utf-8")
-#		written_file.write(text)
-#		written_file.close()
+		written_file_name = 'reviews_txt/review_text' + ('0' * padding) + str(i) + '.txt'
+		written_file = codecs.open(written_file_name, "w", "utf-8")
+		written_file.write(text)
+		written_file.close()
 
 		# Adding to a dictionary
 		text_to_stars[written_file_name] = stars
 		counter += 1
 
-for i in range(100):
-    zeroes = 2 - len(str(i))
-    zeroes_str = zeroes * '0'
-    comm = "dependencyparser.sh review_text" + zeroes_str + str(i) + ".txt > review_parsed" + zeroes_str + str(i) + ".xml"
-    os.system(comm)
+
+# for i in range(100):
+#     zeroes = 2 - len(str(i))
+#     zeroes_str = zeroes * '0'
+#     comm = "dependencyparser.sh review_text" + zeroes_str + str(i) + ".txt > reviews_xml/review_parsed" + zeroes_str + str(i) + ".xml"
+#     os.system(comm)
