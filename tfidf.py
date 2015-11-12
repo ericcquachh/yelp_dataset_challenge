@@ -6,10 +6,42 @@ sudo pip install -U textblob
 
 python -m textblob.download_corpora
 """
-
+from __future__ import division, unicode_literals
 import math
 from textblob import TextBlob as tb
-from __future__ import division, unicode_literals
+
+DATA_PATH = "/Users/ericquach/Github/yelp_data/"
+#DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
+file_name = DATA_PATH+ "yelp_academic_dataset_review.json"
+
+import json
+import codecs
+import os
+
+text_to_stars = {}
+with open(file_name) as json_file:
+    counter = 0
+    for i, line in enumerate(json_file):
+        # Since we're just exploring, we're only counting the first 100 files
+        if counter >= 100:
+            break
+
+        # Returns a dictionary for the each line
+        parsed_json = json.loads(line) 
+        # Important fields are accumulated below
+        stars = parsed_json['stars']
+        text = parsed_json['text']
+
+        # Wrtiting to a file
+        padding = 2 - len(str(i))
+        written_file_name = 'review_text' + ('0' * padding) + str(i) + '.txt'
+#       written_file = codecs.open(written_file_name, "w", "utf-8")
+#       written_file.write(text)
+#       written_file.close()
+
+        # Adding to a dictionary
+        text_to_stars[written_file_name] = stars
+        counter += 1
 
 def tf(word, blob):
     return blob.words.count(word) / len(blob.words)
@@ -29,7 +61,8 @@ import operator
 
 
 for num in range(100):
-    review = "review_text" + str(num).zfill(4) + ".txt"
+    DATA_PATH = "/Users/ericquach/Github/yelp_data/"
+    review = DATA_PATH + "review_text" + str(num).zfill(2) + ".txt"
     file = open(review)
     t = file.read() 
     t = t.decode("utf8")
@@ -45,7 +78,7 @@ one_star = {}
 for i, blob in enumerate(bloblist):
     #print("Top words in document {}".format(i + 1))
     
-    review = "review_text" + str(i).zfill(4) + ".txt"
+    review = "review_text" + str(i).zfill(2) + ".txt"
     
     scores = {word: tfidf(word, blob, bloblist) for word in blob.words}
     sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
