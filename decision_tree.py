@@ -1,11 +1,13 @@
 """ DECISION TREE """
 
-#from __future__ import print_function, unicode_literals
+# For reference
+# http://www.nltk.org/_modules/nltk/classify/decisiontree.html
 
 import nltk
 import json
 import time
 import operator
+import math
 
 from textblob import TextBlob as tb
 
@@ -59,8 +61,24 @@ def text_array(n):
 
 #def freq(word, ):
 
+# def n_containing(word, bloblist):
+# 	return sum(1 for blob in bloblist if word in blob)
+
+def tf(word, blob):
+	#value = float(blob.words.count(word)) / len(blob.words)
+	#print value
+	return float(blob.words.count(word)) / len(blob.words)
+
 def n_containing(word, bloblist):
-	return sum(1 for blob in bloblist if word in blob)
+    return sum(1 for blob in bloblist if word in blob)
+
+def idf(word, bloblist):
+	#value = float(math.log(len(bloblist)) / (1 + n_containing(word, bloblist)))
+	#print value
+   	return float(math.log(len(bloblist)) / (1 + n_containing(word, bloblist)))
+
+def tfidf(word, blob, bloblist):
+    return tf(word, blob) * idf(word, bloblist)
 
 
 def word_feat(words):
@@ -113,16 +131,12 @@ for i, blob in enumerate(bloblist):
 
 	if (i % (iterations/10) == 0): 
 		print "We have finished " + str(int((float(i) / iterations) * 100)) + " percent of BLOBLIST iterations"
-	# padding = 2 - len(str(i)) 	#print blob.words
-	#print blob.words.count()
 
-	scores = {word: n_containing(word, bloblist) for word in blob.words}
-	#scores = {}
-	#print scores
+	scores = {word: n_containing(word, bloblist) for word in blob.words} # Number of documents a word occurs.
+	#scores = {word: tfidf(word, blob, bloblist) for word in blob.words} # TFIDF
    	sorted_words = sorted(scores.items(), key=lambda x: x[1], reverse=True)
    	for word, score in sorted_words:
    		w = word
-   		#print word, score
    		if stars_array[i] >= 3:
    			if w not in positive_stars:
    				positive_stars[w] = [score]
@@ -145,8 +159,8 @@ for key, value in negative_stars.iteritems():
 
 print len(positive_stars), len(negative_stars)
 
-pos = sorted(positive_stars.items(), key=operator.itemgetter(1), reverse=True)[20:2000] # should I change this number?
-neg = sorted(negative_stars.items(), key=operator.itemgetter(1), reverse=True)[20:2000]
+pos = sorted(positive_stars.items(), key=operator.itemgetter(1), reverse=True)[0:2000] # should I change this number?
+neg = sorted(negative_stars.items(), key=operator.itemgetter(1), reverse=True)[0:2000]
 
 combined = pos + neg
 feature_set = []
