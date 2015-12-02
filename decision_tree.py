@@ -162,7 +162,17 @@ print len(positive_stars), len(negative_stars)
 pos = sorted(positive_stars.items(), key=operator.itemgetter(1), reverse=True)[0:2000] # should I change this number?
 neg = sorted(negative_stars.items(), key=operator.itemgetter(1), reverse=True)[0:2000]
 
-combined = pos + neg
+positive = []
+for elem in pos:
+	if (elem[0]) > 3:
+		positive.append(elem)
+
+negative = []
+for elem in neg:
+	if (elem[0]) > 3:
+		negative.append(elem)
+
+combined = positive + negative
 feature_set = []
 for i, elem in enumerate(total_text):
 	# elem is the words in a document
