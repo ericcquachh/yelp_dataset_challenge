@@ -59,11 +59,6 @@ def text_array(n):
 			array_of_text[i] = text
 	return array_of_text
 
-#def freq(word, ):
-
-# def n_containing(word, bloblist):
-# 	return sum(1 for blob in bloblist if word in blob)
-
 def tf(word, blob):
 	#value = float(blob.words.count(word)) / len(blob.words)
 	#print value
@@ -164,12 +159,12 @@ neg = sorted(negative_stars.items(), key=operator.itemgetter(1), reverse=True)[0
 
 positive = []
 for elem in pos:
-	if (elem[0]) > 3:
+	if (len(elem[0]) > 3):
 		positive.append(elem)
 
 negative = []
 for elem in neg:
-	if (elem[0]) > 3:
+	if (len(elem[0]) > 3):
 		negative.append(elem)
 
 combined = positive + negative
