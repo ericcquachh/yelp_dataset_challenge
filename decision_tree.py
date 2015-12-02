@@ -167,7 +167,7 @@ for elem in neg:
 	if (len(elem[0]) > 3):
 		negative.append(elem)
 
-combined = positive + negative
+combined = list(set(positive + negative))
 feature_set = []
 for i, elem in enumerate(total_text):
 	# elem is the words in a document
