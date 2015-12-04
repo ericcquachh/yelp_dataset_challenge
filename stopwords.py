@@ -18,11 +18,13 @@ for i in xrange(100):
 	# print words
 	words = RegexpTokenizer(r'\w+').tokenize(text)
 
+	# print len(stopwords.words('english'))
+	# print len(set(stopwords.words('english')))
 	#filtered_words = [word.lower() for word in words if (word not in set(stopwords.words('english')) or len(word) != 1)]
 	filtered_words = []
 	for word in words:
 		word = word.lower()
-		if word not in set(stopwords.words('english')):
+		if word not in stopwords.words('english'):
 			if len(word) != 1:
 				filtered_words.append(word)
 	total_text.append(filtered_words)
