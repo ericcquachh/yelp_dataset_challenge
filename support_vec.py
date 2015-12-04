@@ -108,15 +108,19 @@ result_list = []
 testing_list = []
 training_y = []
 testing_y = []
+star_training_y = []
+star_testing_y = []
 for i in range(iterations):
 	if i >= int(float(iterations)*3/4):
 		testing_list.append(model.docvecs["DOC_" + str(i)])
+		star_testing_y.append(stars_array[i])
 		if (stars_array[i] >= 3):
 			testing_y.append(1)
 		else:
 			testing_y.append(0)
 	else:
 		result_list.append(model.docvecs["DOC_" + str(i)])
+		star_training_y.append(stars_array[i])
 		if (stars_array[i] >= 3):
 			training_y.append(1)
 		else:
@@ -126,6 +130,8 @@ result_list = np.array(result_list)
 testing_list = np.array(testing_list)
 training_y = np.array(training_y)
 testing_y = np.array(testing_y)
+star_training_y = np.array(star_training_y)
+star_testing_y = np.array(star_testing_y)
 
 svc = svm.SVC(kernel='linear')
 svc.fit(result_list, training_y)
@@ -136,7 +142,14 @@ print("Classification report for classifier %s:\n%s\n"
       % (svc, metrics.classification_report(testing_y, predicted)))
 print("Confusion matrix:\n%s" % metrics.confusion_matrix(testing_y, predicted))
 
+svc2 = svm.SVC(kernel='linear')
+svc2.fit(result_list, star_training_y)
 
+predicted2 = svc2.predict(testing_list)
+
+print("Classification report for classifier %s:\n%s\n"
+      % (svc2, metrics.classification_report(star_testing_y, predicted2)))
+print("Confusion matrix:\n%s" % metrics.confusion_matrix(star_testing_y, predicted2))
 
 
 
