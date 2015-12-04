@@ -57,10 +57,18 @@ def positive_negative_array(array):
 			array_of_pos_neg[i] = "negative"
 	return array_of_pos_neg
 
+""" Here we provide the document labels to feed our doc2vec """
+def doc_label_array(n):
+	string = "DOC_"
+	array_of_doc = [0 for i in range(1569264)]
+	for i in range(n):
+		array_of_doc[i] = string + str(i)
+	return array_of_doc
+
 
 DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
 file_name = DATA_PATH  + "yelp_academic_dataset_review.json"
-iterations = 5000
+iterations = 10000
 
 print "Starting Classification for " + str(iterations) + " reviews."
 
@@ -68,6 +76,7 @@ start_time = time.time()
 stars_array = star_array(iterations)[0:iterations]
 pos_neg_array = positive_negative_array(stars_array)[0:iterations]
 review_text = text_array(iterations)[0:iterations] # possibly train on more data
+document_labels = doc_label_array(iterations)[0:iterations]
 
 class LabeledLineSentence(object):
 
@@ -80,9 +89,10 @@ class LabeledLineSentence(object):
 			yield LabeledSentence(words=doc.split(), tags=[self.labels_list[idx]])
 
 
-it = LabeledLineSentence(review_text, pos_neg_array)
+it = LabeledLineSentence(review_text, document_labels)
+# it = LabeledLineSentence(review_text, pos_neg_array)
 
-model = gensim.models.Doc2Vec(size=100, window=10, min_count=5,
+model = gensim.models.Doc2Vec(size=300, window=10, min_count=5,
  workers=11, alpha=0.025, min_alpha=0.025)
 
 model.build_vocab(it)
@@ -94,45 +104,37 @@ for epoch in range(10):
 	model.min_alpha = model.alpha
 	model.train(it)
 
-#result_list = model['positive'][0:int(float(len(model['positive']))*3/4)] + model['negative'][0:int(float(len(model['positive']))*3/4)]
-# for i in range(int(float(iterations)*3/4)):
-# 	result_list.append(model())
-#test_list = model['positive'][int(float(iterations)*3/4):len(model['positive'])] + model['negative'][int(float(iterations)*3/4):len(model['negative'])]
-
 result_list = []
 testing_list = []
 training_y = []
 testing_y = []
-for i in range(len(model['positive'])):
+for i in range(iterations):
 	if i >= int(float(iterations)*3/4):
-		testing_list.append(model['positive'][i])
-		testing_y.append(1)
+		testing_list.append(model.docvecs["DOC_" + str(i)])
+		if (stars_array[i] >= 3):
+			testing_y.append(1)
+		else:
+			testing_y.append(0)
 	else:
-		result_list.append(model['positive'][i])
-		training_y.append(1)
-
-for i in range(len(model['negative'])):
-	if i >= int(float(iterations)*3/4):
-		testing_list.append(model['negative'][i])
-		testing_y.append(0)
-	else:
-		result_list.append(model['negative'][i])
-		training_y.append(0)
+		result_list.append(model.docvecs["DOC_" + str(i)])
+		if (stars_array[i] >= 3):
+			training_y.append(1)
+		else:
+			training_y.append(0)
 
 result_list = np.array(result_list)
 testing_list = np.array(testing_list)
 training_y = np.array(training_y)
 testing_y = np.array(testing_y)
 
-#training_y = [1 for i in range(int(float(iterations)*3/4))]
-#testing_y = [1 for i in range(int(float(iterations)*3/4), len(model['positive']))]
-
 svc = svm.SVC(kernel='linear')
-svc.fit(result_list.reshape(-1, 1), training_y)
+svc.fit(result_list, training_y)
 
-predicted = svc.predict(testing_list.reshape(-1, 1))
+predicted = svc.predict(testing_list)
 
-print metrics.classification_report(testing_y, predicted)
+print("Classification report for classifier %s:\n%s\n"
+      % (svc, metrics.classification_report(testing_y, predicted)))
+print("Confusion matrix:\n%s" % metrics.confusion_matrix(testing_y, predicted))
 
 
 
