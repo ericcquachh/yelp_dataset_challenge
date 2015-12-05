@@ -24,13 +24,13 @@ Star Classification: TBD
 
 3) Support Vector Machine - Using the library doc2vec, we've created a vector for each document and classified using SVM's Vector Library
 
-Positive and Negative Classification: 85%
-Star Classification: 45%
+Positive and Negative Classification: 86%
+Star Classification: 46%
 
 4) K Nearest Neighbors - Using doc2vec again, we tried running kNN over the same data
 
-Positive and Negative Classification: 
-Star Classification:
+Positive and Negative Classification: 37%
+Star Classification: 15%
 
 # In Progress Featurization
 
@@ -42,4 +42,4 @@ Star Classification:
 
 4) Logisitic Regression/MaxEntropy
 
-5) Random Forrests 
+5) Random Forests 
