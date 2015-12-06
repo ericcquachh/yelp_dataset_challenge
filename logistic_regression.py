@@ -110,6 +110,10 @@ training_y = []
 testing_y = []
 star_training_y = []
 star_testing_y = []
+
+neutral_training_y = [] # 1 is positive, 0 is neutral, -1 is negative
+neutral_testing_y = []
+
 for i in range(iterations):
 	if i >= int(float(iterations)*3/4):
 		testing_list.append(model.docvecs["DOC_" + str(i)])
@@ -118,6 +122,13 @@ for i in range(iterations):
 			testing_y.append(1)
 		else:
 			testing_y.append(0)
+
+		if (stars_array[i] > 3):
+			neutral_testing_y.append(1) 
+		elif (stars_array[i] == 3):
+			neutral_testing_y.append(0)
+		else: 
+			neutral_testing_y.append(-1)
 	else:
 		result_list.append(model.docvecs["DOC_" + str(i)])
 		star_training_y.append(stars_array[i])
@@ -126,6 +137,13 @@ for i in range(iterations):
 		else:
 			training_y.append(0)
 
+		if (stars_array[i] > 3):
+			neutral_training_y.append(1) 
+		elif (stars_array[i] == 3):
+			neutral_training_y.append(0)
+		else: 
+			neutral_training_y.append(-1)
+
 result_list = np.array(result_list)
 testing_list = np.array(testing_list)
 training_y = np.array(training_y)
@@ -133,13 +151,16 @@ testing_y = np.array(testing_y)
 star_training_y = np.array(star_training_y)
 star_testing_y = np.array(star_testing_y)
 
+neutral_training_y = np.array(neutral_training_y)
+neutral_testing_y = np.array(neutral_testing_y)
+
 log_reg = LogisticRegression()
+# (penalty='l2', dual=False, tol=0.0001, C=1.0, 
+	# fit_intercept=True, intercept_scaling=1, 
+	# class_weight=None, random_state=None, solver='liblinear', 
+	# max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
 log_reg.fit(result_list, training_y)
 
-#svc = svm.SVC(kernel='linear')
-#svc.fit(result_list, training_y)
-
-#predicted = svc.predict(testing_list)
 predicted = log_reg.predict(testing_list)
 
 count = 0
@@ -159,6 +180,17 @@ for i in range(len(predicted2)):
 		count2 += 1
 
 print "accuracy" + str(float(count2) / len(predicted2))
+
+log_reg3 = LogisticRegression()
+log_reg3.fit(result_list, neutral_training_y)
+predicted3 = log_reg3.predict(testing_list)
+
+count3 = 0
+for i in range(len(predicted3)):
+	if predicted3[i] == neutral_testing_y[i]:
+		count3 += 1
+
+print "accuracy" + str(float(count3) / len(predicted3))
 
 """
 

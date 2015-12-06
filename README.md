@@ -15,26 +15,31 @@ Just kidding. Nothing is implemented.
 1) Naive Bayes - The current only feature is sort by highest TF-IDF value
 
 Positive and Negative Classification: 84%
+Neutral: 66%
 Star Classification: 30%
 
 2) Decision Tree - The current only feature is sort by highest word frequencies
 
 Positive and Negative Classification: 80%
-Star Classification: TBD
+Neutral: NA
+Star Classification: NA
 
 3) Support Vector Machine - Using the library doc2vec, we've created a vector for each document and classified using SVM's Vector Library
 
 Positive and Negative Classification: 86%
+Neutral: 73%
 Star Classification: 46%
 
 4) K Nearest Neighbors - Using doc2vec again, we tried running kNN over the same data
 
 Positive and Negative Classification: 84%
+Neutral: 69%
 Star Classification: 36%
 
 5) Logistic Regression - Using doc2vec for our representation, we used sklearn's library for vector representation.
 
 Positive and Negative Classification: 86%
+Neutral: 73%
 Star Classification: 46%
 
 # In Progress Featurization

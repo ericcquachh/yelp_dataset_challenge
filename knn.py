@@ -114,6 +114,10 @@ training_y = []
 testing_y = []
 star_training_y = []
 star_testing_y = []
+
+neutral_training_y = [] # 1 is positive, 0 is neutral, -1 is negative
+neutral_testing_y = []
+
 for i in range(iterations):
 	if i >= int(float(iterations)*3/4):
 		testing_list.append(model.docvecs["DOC_" + str(i)])
@@ -122,6 +126,13 @@ for i in range(iterations):
 			testing_y.append(1)
 		else:
 			testing_y.append(0)
+
+		if (stars_array[i] > 3):
+			neutral_testing_y.append(1) 
+		elif (stars_array[i] == 3):
+			neutral_testing_y.append(0)
+		else: 
+			neutral_testing_y.append(-1)
 	else:
 		result_list.append(model.docvecs["DOC_" + str(i)])
 		star_training_y.append(stars_array[i])
@@ -130,12 +141,22 @@ for i in range(iterations):
 		else:
 			training_y.append(0)
 
+		if (stars_array[i] > 3):
+			neutral_training_y.append(1) 
+		elif (stars_array[i] == 3):
+			neutral_training_y.append(0)
+		else: 
+			neutral_training_y.append(-1)
+
 result_list = np.array(result_list)
 testing_list = np.array(testing_list)
 training_y = np.array(training_y)
 testing_y = np.array(testing_y)
 star_training_y = np.array(star_training_y)
 star_testing_y = np.array(star_testing_y)
+
+neutral_training_y = np.array(neutral_training_y)
+neutral_testing_y = np.array(neutral_testing_y)
 
 i_values = [1, 2, 3, 5, 10, 20, 30, 50, 100]
 
@@ -180,6 +201,26 @@ for i in i_values:
 	if (curr_accuracy > top_accuracy2):
 		top_accuracy2 = curr_accuracy
 		best_i2 = i
+
+best_i3 = 0
+top_accuracy3 = 0
+# for i in range(1, 31):
+for i in i_values:
+	knn = KNeighborsClassifier(n_neighbors=i, weights='uniform', algorithm='auto', 
+		leaf_size=30, p=2, metric='minkowski', metric_params=None, n_jobs=1)
+
+	knn.fit(result_list, neutral_training_y)
+	predicted = knn.predict(testing_list)
+	count = 0
+	for j in range(len(predicted)):
+		if predicted[j] == neutral_testing_y[j]:
+			count += 1
+
+	curr_accuracy = float(count) / len(predicted)
+	print i, curr_accuracy
+	if (curr_accuracy > top_accuracy3):
+		top_accuracy3 = curr_accuracy
+		best_i3 = i
 
 """
 knn = KNeighborsClassifier(n_neighbors=4, weights='uniform', algorithm='auto', 

@@ -110,6 +110,10 @@ training_y = []
 testing_y = []
 star_training_y = []
 star_testing_y = []
+
+neutral_training_y = [] # 1 is positive, 0 is neutral, -1 is negative
+neutral_testing_y = []
+
 for i in range(iterations):
 	if i >= int(float(iterations)*3/4):
 		testing_list.append(model.docvecs["DOC_" + str(i)])
@@ -118,6 +122,13 @@ for i in range(iterations):
 			testing_y.append(1)
 		else:
 			testing_y.append(0)
+
+		if (stars_array[i] > 3):
+			neutral_testing_y.append(1) 
+		elif (stars_array[i] == 3):
+			neutral_testing_y.append(0)
+		else: 
+			neutral_testing_y.append(-1)
 	else:
 		result_list.append(model.docvecs["DOC_" + str(i)])
 		star_training_y.append(stars_array[i])
@@ -126,6 +137,13 @@ for i in range(iterations):
 		else:
 			training_y.append(0)
 
+		if (stars_array[i] > 3):
+			neutral_training_y.append(1) 
+		elif (stars_array[i] == 3):
+			neutral_training_y.append(0)
+		else: 
+			neutral_training_y.append(-1)
+
 result_list = np.array(result_list)
 testing_list = np.array(testing_list)
 training_y = np.array(training_y)
@@ -133,23 +151,47 @@ testing_y = np.array(testing_y)
 star_training_y = np.array(star_training_y)
 star_testing_y = np.array(star_testing_y)
 
+neutral_training_y = np.array(neutral_training_y)
+neutral_testing_y = np.array(neutral_testing_y)
+
+
 svc = svm.SVC(kernel='linear')
 svc.fit(result_list, training_y)
 
 predicted = svc.predict(testing_list)
 
+print "Positive and Negative Classification: "
 print("Classification report for classifier %s:\n%s\n"
       % (svc, metrics.classification_report(testing_y, predicted)))
 print("Confusion matrix:\n%s" % metrics.confusion_matrix(testing_y, predicted))
+
+svc3 = svm.SVC(kernel='linear')
+svc3.fit(result_list, neutral_training_y)
+
+predicted3 = svc3.predict(testing_list)
+
+print "Positive, Negative, Neutral Classification: "
+print("Classification report for classifier %s:\n%s\n"
+      % (svc3, metrics.classification_report(neutral_testing_y, predicted)))
+print("Confusion matrix:\n%s" % metrics.confusion_matrix(neutral_testing_y, predicted))
 
 svc2 = svm.SVC(kernel='linear')
 svc2.fit(result_list, star_training_y)
 
 predicted2 = svc2.predict(testing_list)
 
+print "Stars Classification: "
 print("Classification report for classifier %s:\n%s\n"
       % (svc2, metrics.classification_report(star_testing_y, predicted2)))
 print("Confusion matrix:\n%s" % metrics.confusion_matrix(star_testing_y, predicted2))
+
+"""
+count = 0
+for i in range(len(predicted)):
+	if predicted3[i] == neutral_testing_y[i]:
+		count += 1
+
+print "accuracy" + str(float(count) / len(predicted3))"""
 
 
 
