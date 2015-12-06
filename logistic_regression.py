@@ -1,7 +1,3 @@
-""" kNN classifier """
-
-""" word 2 vec """
-""" want doc2vec instead"""
 
 import nltk
 import json
@@ -24,7 +20,8 @@ from nltk import word_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords
 
 from sklearn import metrics
-from sklearn.neighbors import KNeighborsClassifier
+
+from sklearn.linear_model import LogisticRegression
 
 """ Retrieve the stars of each review in their corresponding array. """
 def star_array(n):
@@ -71,8 +68,7 @@ def doc_label_array(n):
 
 DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
 file_name = DATA_PATH  + "yelp_academic_dataset_review.json"
-iterations = int(raw_input("What number of reviews would you like to train on? : "))
-# iterations = 10000
+iterations = 10000
 
 print "Starting Classification for " + str(iterations) + " reviews."
 
@@ -137,72 +133,52 @@ testing_y = np.array(testing_y)
 star_training_y = np.array(star_training_y)
 star_testing_y = np.array(star_testing_y)
 
-"""
-best_i = 0
-top_accuracy = 0
-for i in range(1, 31):
-	knn = KNeighborsClassifier(n_neighbors=i, weights='uniform', algorithm='auto', 
-		leaf_size=30, p=2, metric='minkowski', metric_params=None, n_jobs=1)
+log_reg = LogisticRegression()
+log_reg.fit(result_list, training_y)
 
-	knn.fit(result_list, training_y)
-	predicted = knn.predict(testing_list)
-	count = 0
-	for j in range(len(predicted)):
-		if predicted[j] == testing_y[j]:
-			count += 1
+#svc = svm.SVC(kernel='linear')
+#svc.fit(result_list, training_y)
 
-	curr_accuracy = float(count) / len(predicted)
-	print i, curr_accuracy
-	if (curr_accuracy > top_accuracy):
-		top_accuracy = curr_accuracy
-		best_i = i
-
-		"""
-
-best_i2 = 0
-top_accuracy2 = 0
-for i in range(1, 31):
-	knn = KNeighborsClassifier(n_neighbors=i, weights='uniform', algorithm='auto', 
-		leaf_size=30, p=2, metric='minkowski', metric_params=None, n_jobs=1)
-
-	knn.fit(result_list, star_training_y)
-	predicted = knn.predict(testing_list)
-	count = 0
-	for j in range(len(predicted)):
-		if predicted[j] == star_testing_y[j]:
-			count += 1
-
-	curr_accuracy = float(count) / len(predicted)
-	print i, curr_accuracy
-	if (curr_accuracy > top_accuracy2):
-		top_accuracy2 = curr_accuracy
-		best_i2 = i
-
-"""
-knn = KNeighborsClassifier(n_neighbors=4, weights='uniform', algorithm='auto', 
-	leaf_size=30, p=2, metric='minkowski', metric_params=None, n_jobs=1)
-
-knn.fit(result_list, training_y)
-
-predicted = knn.predict(testing_list)
+#predicted = svc.predict(testing_list)
+predicted = log_reg.predict(testing_list)
 
 count = 0
 for i in range(len(predicted)):
 	if predicted[i] == testing_y[i]:
 		count += 1
 
-print "accuracy " + str(float(count) / len(predicted))
+print "accuracy" + str(float(count) / len(predicted))
+
+log_reg2 = LogisticRegression()
+log_reg2.fit(result_list, star_training_y)
+predicted2 = log_reg2.predict(testing_list)
+
+count2 = 0
+for i in range(len(predicted2)):
+	if predicted2[i] == star_testing_y[i]:
+		count2 += 1
+
+print "accuracy" + str(float(count2) / len(predicted2))
+
+"""
 
 print("Classification report for classifier %s:\n%s\n"
-      % (knn, metrics.classification_report(testing_y, predicted)))
+      % (svc, metrics.classification_report(testing_y, predicted)))
 print("Confusion matrix:\n%s" % metrics.confusion_matrix(testing_y, predicted))
 
-# knn2 = KNeighborsClassifier()
-# knn2.fit(result_list, star_training_y)
+svc2 = svm.SVC(kernel='linear')
+svc2.fit(result_list, star_training_y)
 
-# predicted2 = knn2.predict(testing_list)
+predicted2 = svc2.predict(testing_list)
 
-# print("Classification report for classifier %s:\n%s\n"
-#       % (knn2, metrics.classification_report(star_testing_y, predicted2)))
-# print("Confusion matrix:\n%s" % metrics.confusion_matrix(star_testing_y, predicted2)) """
+print("Classification report for classifier %s:\n%s\n"
+      % (svc2, metrics.classification_report(star_testing_y, predicted2)))
+print("Confusion matrix:\n%s" % metrics.confusion_matrix(star_testing_y, predicted2))
+"""
+
+
+
+
+
+
 
