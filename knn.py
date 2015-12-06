@@ -137,10 +137,12 @@ testing_y = np.array(testing_y)
 star_training_y = np.array(star_training_y)
 star_testing_y = np.array(star_testing_y)
 
-"""
+i_values = [1, 2, 3, 5, 10, 20, 30, 50, 100]
+
 best_i = 0
 top_accuracy = 0
-for i in range(1, 31):
+# for i in range(1, 31):
+for i in i_values:
 	knn = KNeighborsClassifier(n_neighbors=i, weights='uniform', algorithm='auto', 
 		leaf_size=30, p=2, metric='minkowski', metric_params=None, n_jobs=1)
 
@@ -157,11 +159,12 @@ for i in range(1, 31):
 		top_accuracy = curr_accuracy
 		best_i = i
 
-		"""
+		
 
 best_i2 = 0
 top_accuracy2 = 0
-for i in range(1, 31):
+# for i in range(1, 31):
+for i in i_values:
 	knn = KNeighborsClassifier(n_neighbors=i, weights='uniform', algorithm='auto', 
 		leaf_size=30, p=2, metric='minkowski', metric_params=None, n_jobs=1)
 

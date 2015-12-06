@@ -29,8 +29,13 @@ Star Classification: 46%
 
 4) K Nearest Neighbors - Using doc2vec again, we tried running kNN over the same data
 
-Positive and Negative Classification: 37%
-Star Classification: 15%
+Positive and Negative Classification: 84%
+Star Classification: 36%
+
+5) Logistic Regression - Using doc2vec for our representation, we used sklearn's library for vector representation.
+
+Positive and Negative Classification: 86%
+Star Classification: 46%
 
 # In Progress Featurization
 
@@ -40,6 +45,4 @@ Star Classification: 15%
 
 3) Using N-grams with Textblob
 
-4) Logisitic Regression/MaxEntropy
-
-5) Random Forests 
+4) Random Forests 
