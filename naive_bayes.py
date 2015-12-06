@@ -68,7 +68,7 @@ def n_containing(word, bloblist):
 def idf(word, bloblist):
 	#value = float(math.log(len(bloblist)) / (1 + n_containing(word, bloblist)))
 	#print value
-   	return float(math.log(len(bloblist)) / (1 + n_containing(word, bloblist)))
+   	return float(math.log(float(len(bloblist)) / (1 + n_containing(word, bloblist))))
 
 def tfidf(word, blob, bloblist):
     return tf(word, blob) * idf(word, bloblist)

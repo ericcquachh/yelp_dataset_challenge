@@ -67,7 +67,7 @@ def doc_label_array(n):
 
 
 DATA_PATH = "/Users/colin.garcia/Desktop/yelp_dataset_challenge_academic_dataset/"
-file_name = DATA_PATH  + "yelp_academic_dataset_review.json"
+file_name = DATA_PATH + "yelp_academic_dataset_review.json"
 iterations = 10000
 
 print "Starting Classification for " + str(iterations) + " reviews."

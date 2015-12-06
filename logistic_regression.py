@@ -170,7 +170,18 @@ for i in range(len(predicted)):
 
 print "accuracy" + str(float(count) / len(predicted))
 
-log_reg2 = LogisticRegression()
+# USE NEWTON CG OR LBFS
+print "Star reviews: "
+log_reg2 = LogisticRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, 
+	fit_intercept=True, intercept_scaling=1, 
+	class_weight=None, random_state=None, solver='newton-cg', 
+	max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
+
+# log_reg2_1 = LogisticRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, 
+# 	fit_intercept=True, intercept_scaling=1, 
+# 	class_weight=None, random_state=None, solver='lbfgs', 
+# 	max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
+
 log_reg2.fit(result_list, star_training_y)
 predicted2 = log_reg2.predict(testing_list)
 
@@ -181,7 +192,27 @@ for i in range(len(predicted2)):
 
 print "accuracy" + str(float(count2) / len(predicted2))
 
-log_reg3 = LogisticRegression()
+# log_reg2_1.fit(result_list, star_training_y)
+# predicted2_1 = log_reg2_1.predict(testing_list)
+
+# count2_1 = 0
+# for i in range(len(predicted2_1)):
+# 	if predicted2_1[i] == star_testing_y[i]:
+# 		count2_1 += 1
+
+# print "accuracy" + str(float(count2_1) / len(predicted2_1))
+
+print "Neutral reviews: "
+log_reg3 = LogisticRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, 
+	fit_intercept=True, intercept_scaling=1, 
+	class_weight=None, random_state=None, solver='newton-cg', 
+	max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
+
+# log_reg3_1 = LogisticRegression(penalty='l2', dual=False, tol=0.0001, C=1.0, 
+# 	fit_intercept=True, intercept_scaling=1, 
+# 	class_weight=None, random_state=None, solver='lbfgs', 
+# 	max_iter=100, multi_class='ovr', verbose=0, warm_start=False, n_jobs=1)
+
 log_reg3.fit(result_list, neutral_training_y)
 predicted3 = log_reg3.predict(testing_list)
 
@@ -191,6 +222,16 @@ for i in range(len(predicted3)):
 		count3 += 1
 
 print "accuracy" + str(float(count3) / len(predicted3))
+
+# log_reg3_1.fit(result_list, neutral_training_y)
+# predicted3_1 = log_reg3_1.predict(testing_list)
+
+# count3_1 = 0
+# for i in range(len(predicted3_1)):
+# 	if predicted3_1[i] == neutral_testing_y[i]:
+# 		count3_1 += 1
+
+# print "accuracy" + str(float(count3_1) / len(predicted3_1))
 
 """
 
